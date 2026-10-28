@@ -142,7 +142,7 @@ function preco(c,mg,o){
 function row(k,val,cls){return '<div class="row '+(cls||"")+'"><span>'+k+'</span><b>'+val+'</b></div>'}
 function card(c,r,badge){
   var neg=r.l<0,h='<div class="r'+(badge?' best':'')+'" ><div class="rh" style="--c:'+c.c+'"><h3>'+c.n+'</h3><p>'+c.s+'</p>'+(badge?'<span class="badge">'+badge+'</span>':'')+'</div><div class="rb">';
-  if(mode==2)h+=row("Preço de venda",brl(r.p),"tot");
+  if(mode==2)h+=row("PREÇO SUGERIDO",brl(r.p),"tot");
   h+=row("Comissão ("+pc(r.rate*100)+")","− "+brl(r.com));
   h+=row("Taxa fixa","− "+brl(r.fix));
   if(c.showFr)h+=row("Frete","− "+brl(r.fr));
