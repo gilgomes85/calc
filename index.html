@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calculadora de Precificação — Mercado Livre e Shopee</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+:root{--pg:#e9eff5;--card:#fff;--tx:#1c2733;--mut:#64748b;--bd:#dde5ee;--inp:#eef4fa;--ac:#3a93c9;--ac2:#1f6fa0;--ok:#15803d;--okbg:#e6f4ec;--bad:#b91c1c;--note:#e8f2fa;--ml:#f5b800;--sp:#ee4d2d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0f1419;--card:#1a2029;--tx:#e6ebf1;--mut:#97a3b2;--bd:#2b3441;--inp:#222b36;--ok:#4ade80;--okbg:#173325;--bad:#f87171;--note:#1b2633;color-scheme:dark}}
+:root[data-theme="dark"]{--pg:#0f1419;--card:#1a2029;--tx:#e6ebf1;--mut:#97a3b2;--bd:#2b3441;--inp:#222b36;--ok:#4ade80;--okbg:#173325;--bad:#f87171;--note:#1b2633;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--pg);color:var(--tx);font:15px/1.4 "Poppins",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app{max-width:1120px;margin:16px auto;background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.12)}
+header{background:linear-gradient(135deg,#3a93c9,#1f6fa0);color:#fff;padding:22px 24px}
+header h1{margin:0 0 4px;font-size:1.45rem;font-weight:600}
+header p{margin:0;font-size:.9rem;opacity:.95}
+.body{padding:20px 16px 16px}
+.layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:820px){.layout{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:14px}
+.tabs{display:flex;gap:4px;padding:4px;background:var(--inp);border:1px solid var(--bd);border-radius:12px;margin-bottom:14px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--mut);border-radius:9px;padding:9px 6px;font:inherit;cursor:pointer;text-align:center;line-height:1.25}
+.tabs button b{display:block;font-size:.78rem;font-weight:600;color:var(--tx)}
+.tabs button span{font-size:.75rem}
+.tabs button.on{background:var(--card);box-shadow:0 1px 5px rgba(0,0,0,.2)}
+.tabs button.on span{color:var(--ac)}
+.box h2{margin:0;font-size:1rem;font-weight:600}
+.hint{margin:0 0 10px;color:var(--mut);font-size:.8rem}
+label{display:block;margin:10px 0 5px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.02em;color:var(--mut)}
+label small{text-transform:none;font-weight:400;font-size:.68rem}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.two>div{min-width:0}
+.f{display:flex;align-items:center;background:var(--inp);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.f span{padding:0 0 0 12px;color:var(--mut);font-size:.85rem}
+.f input{flex:1;width:0;min-width:0;border:0;background:transparent;color:var(--tx);font:inherit;font-weight:500;padding:12px 10px 12px 8px;outline:none}
+.f:focus-within{border-color:var(--ac)}
+.btn{width:100%;border:0;border-radius:12px;padding:14px;background:var(--ac);color:#fff;font:inherit;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;align-items:start}
+.r{border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:var(--card)}
+.r.best{border:2px solid #22a06b}
+.rh{padding:12px 14px;border-left:4px solid var(--c);border-bottom:1px solid var(--bd);position:relative}
+.rh h3{margin:0;font-size:.95rem;font-weight:600}
+.rh p{margin:2px 0 0;font-size:.72rem;color:var(--mut)}
+.badge{position:absolute;right:10px;top:10px;background:#22a06b;color:#fff;font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:99px;text-transform:uppercase}
+.rb{padding:6px 14px 14px}
+.row{display:flex;justify-content:space-between;gap:8px;padding:7px 0;font-size:.8rem;border-bottom:1px dotted var(--bd);color:var(--mut)}
+.row b{color:var(--tx);font-weight:500;white-space:nowrap}
+.row.tot{border-bottom:0;font-weight:700;color:var(--tx)}
+.row.tot b{font-weight:700}
+.lucro{margin-top:8px;padding:10px 12px;border-radius:10px;background:var(--okbg);color:var(--ok)}
+.lucro.neg{background:rgba(185,28,28,.12);color:var(--bad)}
+.lucro small{display:block;font-size:.68rem;font-weight:600;text-transform:uppercase;color:var(--mut)}
+.lucro .v{font-size:1.4rem;font-weight:700;line-height:1.25}
+.lucro .m{display:flex;justify-content:space-between;font-size:.72rem;color:var(--tx)}
+.sum{margin-top:14px;padding:12px 14px;border:1px solid var(--bd);background:var(--note);border-radius:10px;font-size:.78rem;color:var(--mut)}
+.sum b{color:var(--tx)}
+.foot{margin-top:18px;padding:14px 16px;background:var(--note);border-radius:10px;font-size:.76rem;color:var(--mut)}
+.foot p{margin:0 0 8px}.foot p:last-child{margin:0}
+.foot b{color:var(--ac)}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>Calculadora de Precificação — Mercado Livre e Shopee</h1>
+  <p>Coloque o preço de venda e o custo do fornecedor e veja quanto você lucra em cada marketplace.</p>
+</header>
+<div class="body">
+<div class="layout">
+  <div>
+    <div class="tabs">
+      <button id="m1" class="on" onclick="setMode(1)"><b>Tenho o preço de venda</b><span>quero ver o lucro</span></button>
+      <button id="m2" onclick="setMode(2)"><b>Quero uma margem</b><span>qual preço cobrar?</span></button>
+    </div>
+    <div class="box">
+      <h2>Produto</h2>
+      <p class="hint">Valores por unidade vendida</p>
+      <div id="gPreco"><label>Preço de venda</label><div class="f"><span>R$</span><input id="preco" type="number" step="0.01" min="0" value="80" inputmode="decimal"></div></div>
+      <div id="gMargem" style="display:none"><label>Margem de lucro desejada (% sobre o preço)</label><div class="f"><span>%</span><input id="margem" type="number" step="0.1" min="0" value="20" inputmode="decimal"></div></div>
+      <label>Custo no fornecedor</label><div class="f"><span>R$</span><input id="custo" type="number" step="0.01" min="0" value="30" inputmode="decimal"></div>
+      <div class="two">
+        <div><label>Custos extras</label><div class="f"><span>R$</span><input id="extra" type="number" step="0.01" min="0" value="2" inputmode="decimal"></div></div>
+        <div><label>Imposto</label><div class="f"><span>%</span><input id="imp" type="number" step="0.1" min="0" value="6" inputmode="decimal"></div></div>
+      </div>
+    </div>
+    <div class="box">
+      <h2>Taxas do Mercado Livre</h2>
+      <p class="hint">A comissão muda conforme a categoria, ajuste se precisar</p>
+      <div class="two">
+        <div><label>Clássico</label><div class="f"><span>%</span><input id="cl" type="number" step="0.1" min="0" value="12" inputmode="decimal"></div></div>
+        <div><label>Premium</label><div class="f"><span>%</span><input id="pr" type="number" step="0.1" min="0" value="17" inputmode="decimal"></div></div>
+      </div>
+      <label>Frete pago por você no ML <small>(deixe 0 se não pagar)</small></label>
+      <div class="f"><span>R$</span><input id="frete" type="number" step="0.01" min="0" value="0" inputmode="decimal"></div>
+    </div>
+    <button class="btn" onclick="calc()">Calcular</button>
+  </div>
+  <div>
+    <div class="res" id="out"></div>
+    <div class="sum" id="sum"></div>
+  </div>
+</div>
+<div class="foot">
+  <p><b>Shopee:</b> até R$ 79,99 → 20% + R$ 4,50 · R$ 80 a R$ 99,99 → 14% + R$ 16 · R$ 100 a R$ 199,99 → 14% + R$ 20 · a partir de R$ 200 → 14% + R$ 26. O subsídio Pix é pago pela Shopee e não sai do seu lucro.</p>
+  <p><b>Mercado Livre:</b> Clássico de 10% a 14% e Premium de 15% a 19%, conforme a categoria. Custo fixo: abaixo de R$ 12,50 → 50% do preço · R$ 12,50 a R$ 28,99 → R$ 6,25 · R$ 29 a R$ 49,99 → R$ 6,50 · R$ 50 a R$ 78,99 → R$ 6,75 · a partir de R$ 79 → sem custo fixo.</p>
+  <p>Simulação estimada. As taxas dos marketplaces mudam com frequência. Confira sempre os valores oficiais no painel do vendedor antes de definir seus preços.</p>
+</div>
+</div>
+</div>
+<script>
+var mode=1,INF=1e12;
+var ML=[{a:0,b:12.5,pct:.5,fx:0},{a:12.5,b:29,pct:0,fx:6.25},{a:29,b:50,pct:0,fx:6.5},{a:50,b:79,pct:0,fx:6.75},{a:79,b:INF,pct:0,fx:0}];
+var SP=[{a:0,b:80,c:.2,pct:0,fx:4.5},{a:80,b:100,c:.14,pct:0,fx:16},{a:100,b:200,c:.14,pct:0,fx:20},{a:200,b:INF,c:.14,pct:0,fx:26}];
+function v(id){var n=parseFloat(document.getElementById(id).value);return isNaN(n)?0:n}
+function brl(n){return n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
+function pc(n){return n.toLocaleString("pt-BR",{maximumFractionDigits:1})+"%"}
+function tier(t,p){for(var i=0;i<t.length;i++)if(p>=t[i].a&&p<t[i].b)return t[i];return t[t.length-1]}
+function setMode(m){mode=m;
+  document.getElementById("m1").className=m==1?"on":"";
+  document.getElementById("m2").className=m==2?"on":"";
+  document.getElementById("gPreco").style.display=m==1?"":"none";
+  document.getElementById("gMargem").style.display=m==2?"":"none";
+  calc()}
+function lucro(c,p,o){
+  var t=tier(c.t,p),rate=t.c!==undefined?t.c:c.r;
+  var com=p*rate,fix=p*t.pct+t.fx,im=p*o.imp,fr=c.fr;
+  var tot=com+fix+im+fr+o.custo+o.extra,l=p-tot;
+  return {p:p,rate:rate,com:com,fix:fix,im:im,fr:fr,tot:tot,l:l,m:p>0?l/p*100:0,roi:(o.custo+o.extra)>0?l/(o.custo+o.extra)*100:0}
+}
+function preco(c,mg,o){
+  var base=o.custo+o.extra+c.fr;
+  for(var i=0;i<c.t.length;i++){
+    var t=c.t[i],rate=t.c!==undefined?t.c:c.r,den=1-rate-t.pct-o.imp-mg;
+    if(den<=0)continue;
+    var p=(base+t.fx)/den;
+    if(p>=t.a&&p<t.b+0.005)return p
+  }
+  return null
+}
+function row(k,val,cls){return '<div class="row '+(cls||"")+'"><span>'+k+'</span><b>'+val+'</b></div>'}
+function card(c,r,badge){
+  var neg=r.l<0,h='<div class="r'+(badge?' best':'')+'" ><div class="rh" style="--c:'+c.c+'"><h3>'+c.n+'</h3><p>'+c.s+'</p>'+(badge?'<span class="badge">'+badge+'</span>':'')+'</div><div class="rb">';
+  if(mode==2)h+=row("Preço de venda",brl(r.p),"tot");
+  h+=row("Comissão ("+pc(r.rate*100)+")","− "+brl(r.com));
+  h+=row("Taxa fixa","− "+brl(r.fix));
+  if(c.showFr)h+=row("Frete","− "+brl(r.fr));
+  h+=row("Imposto","− "+brl(r.im));
+  h+=row("Custo do produto","− "+brl(r.cp));
+  h+=row("Custos extras","− "+brl(r.ce));
+  h+=row("Custos totais",brl(r.tot),"tot");
+  h+='<div class="lucro'+(neg?' neg':'')+'"><small>Lucro líquido</small><div class="v">'+brl(r.l)+'</div><div class="m"><span>Margem <b>'+pc(r.m)+'</b></span><span>ROI <b>'+pc(r.roi)+'</b></span></div></div></div></div>';
+  return h
+}
+function calc(){
+  var o={custo:v("custo"),extra:v("extra"),imp:v("imp")/100},frete=v("frete");
+  var cs=[
+    {n:"ML Clássico",s:"Mercado Livre · anúncio Clássico",c:"var(--ml)",t:ML,r:v("cl")/100,fr:frete,showFr:true},
+    {n:"ML Premium",s:"Mercado Livre · 12x sem juros",c:"var(--ml)",t:ML,r:v("pr")/100,fr:frete,showFr:true},
+    {n:"Shopee",s:"Comissão por faixa de preço",c:"var(--sp)",t:SP,r:0,fr:0,showFr:false}];
+  var res=[],bi=-1,html="",sum="",mg=v("margem")/100;
+  cs.forEach(function(c,i){
+    var p=mode==1?v("preco"):preco(c,mg,o);
+    if(p===null){res.push(null);return}
+    if(mode==2)p=Math.ceil(p*100)/100;
+    var r=lucro(c,p,o);r.cp=o.custo;r.ce=o.extra;res.push(r);
+    if(bi<0||(mode==1?r.l>res[bi].l:r.p<res[bi].p))bi=i
+  });
+  cs.forEach(function(c,i){
+    if(!res[i])html+='<div class="r"><div class="rh" style="--c:'+c.c+'"><h3>'+c.n+'</h3><p>'+c.s+'</p></div><div class="rb"><p style="color:var(--bad);font-size:.8rem">Margem inviável: taxas, imposto e margem somam 100% ou mais.</p></div></div>';
+    else html+=card(c,res[i],i==bi?(mode==1?"Mais lucro":"Menor preço"):"")
+  });
+  if(mode==1){
+    var be=cs.map(function(c){var p=preco(c,0,o);return c.n+": "+(p===null?"—":brl(Math.ceil(p*100)/100))}).join(" · ");
+    if(bi>=0&&res[bi].l>0)sum="Vendendo por <b>"+brl(v("preco"))+"</b>, o melhor resultado é no <b>"+cs[bi].n+"</b>: lucro de <b>"+brl(res[bi].l)+"</b> por venda.";
+    else sum="Com o preço de <b>"+brl(v("preco"))+"</b>, nenhum canal dá lucro.";
+    sum+="<br>Preço mínimo para não ter prejuízo → "+be
+  }else if(bi>=0){
+    sum="Para uma margem de <b>"+pc(mg*100)+"</b>, o menor preço necessário é no <b>"+cs[bi].n+"</b>: <b>"+brl(res[bi].p)+"</b> (lucro de "+brl(res[bi].l)+" por venda).";
+  }else sum="Margem inviável com essas taxas.";
+  document.getElementById("out").innerHTML=html;
+  document.getElementById("sum").innerHTML=sum
+}
+document.querySelectorAll("input").forEach(function(i){i.addEventListener("input",calc)});
+calc();
+</script>
+</body>
+</html>
